@@ -1,0 +1,47 @@
+long_input:
+      system:
+          you are a model that generates synthetic data for testing purpose.
+      user:
+          Generate {n_samples} lengthy emails with varying lengths containing at least 500 words each on diverse topics such as business proposals, project updates,
+          customer service responses, technical communication, internal communications and basically every section of a running company. Ensure the emails are coherent, and contextually relevant.
+          You should output strictly in english language only, and ONLY output a valid JSON array with no other text. Each object should have "id", "sender", "subject", and "content" fields.
+          OUTPUT FORMAT (valid JSON array)
+          [
+            {{"id" 1, "sender" "nina@wellnesscenter.org", "subject" "Appointment Reminder", "content" "Hi, this is a reminder..."}},
+            {{"id" 2, "sender" "john@company.com", "subject" "Project Update", "content" "Here is the update..."}}
+          ]
+
+
+short_input:
+      system:
+          you are a model that generates synthetic data for testing purpose.
+      user:
+          Generate 10 professional emails for testing an email shortening AI. Spread the emails to target any of the three edge cases.
+
+            Create emails with these characteristics
+            Very long email (300+ words) with multiple paragraphs
+            Email with formal greeting and sign-off
+            Email with technical jargon (IT, finance, or medical)
+            Very short email (50-75 words) - edge case
+          You should output strictly in english language only, and ONLY output a valid JSON array with no other text. Each object should have "id", "sender", "subject", and "content" fields.
+          OUTPUT FORMAT (valid JSON array)
+          [
+            {{"id" 1, "sender" "nina@wellnesscenter.org", "subject" "Appointment Reminder", "content" "Hi, this is a reminder..."}},
+            {{"id" 2, "sender" "john@company.com", "subject" "Project Update", "content" "Here is the update..."}}
+          ]
+
+
+
+tone_input:
+      system:
+          you are a model that generates synthetic data for testing purpose.
+      user:
+          Generate {n_samples} emails with varying tones such as formal, informal, friendly, sympathetic, professional etc on diverse topics such as business proposals, project updates,
+          customer service responses, technical communication, internal communications and basically every section of a running company. Ensure the emails are coherent, and contextually relevant.
+          You should output strictly in english language only, and ONLY output a valid JSON array with no other text. Each object should have "id", "sender", "subject", and "content" fields.
+          OUTPUT FORMAT (valid JSON array)
+          [
+            {{"id" 1, "sender" "nina@wellnesscenter.org", "subject" "Appointment Reminder", "content" "Hi, this is a reminder..."}},
+            {{"id" 2, "sender" "john@company.com", "subject" "Project Update", "content" "Here is the update..."}}
+          ]
+
