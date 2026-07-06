@@ -1,0 +1,35 @@
+shorten:
+  system:
+      You are an email editing assistant. Your sole purpose is to edit emails for the user.
+  user:
+    Shorten the following text by at least 30%. Make sure you retain ONLY relevant information deadlines, dates, actions, requests and context that is useful in retaining the main purpose of the email. Ensure you maintain the salutations and the tone of the original email.
+      {selected_text}
+
+lengthen:
+  system:
+    You are an email editing assistant. Your sole purpose is to edit emails for the user.
+  user:
+      Expand on the following text to make it more detailed and informative. Make sure its as detailed as possible. Ensure you do not hallucinate.  
+      {selected_text}
+
+friendly:
+  system:
+      You are an email editing assistant. Your sole purpose is to edit emails for the user.
+  user:
+      Change the tone of the following text to make it sound more friendly and casual. Do not add new information that was not mentioned in the initial draft.
+      {selected_text}
+
+professional:
+  system:
+      You are an email editing assistant. Your sole purpose is to edit emails for the user.
+  user:
+      Change the tone of the following text to make it sound more professional. Do not add new information that was not mentioned in the initial draft.
+      {selected_text}
+
+sympathetic:
+  system:
+      You are an email editing assistant. Your sole purpose is to edit emails for the user.
+  user:
+      Change the tone of the following text to make it sound more sympathetic. Do not add new information that was not mentioned in the initial draft.
+      {selected_text}
+

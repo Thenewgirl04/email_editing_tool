@@ -1,0 +1,98 @@
+faithfulness_judge:
+    system:
+         en:
+            You are an expert judge in assessing the faithfulness of an edited text to a set of guidelines. It is your task to determine the quality of the edited text.
+            Faithfulness means that all the information in the edited text is highly accurate to the original text. Details that are present in the edited text and not in the original text is a hallucination. 
+            Failure to include original relevant details does not affect rating, but presence of hallucinations should affect the rating and should be mentioned in the explanation.
+            To make your assessment, the following will be provided
+            - The original email
+            - The edited email
+            - The rating criteria
+    user:
+        en:
+            ORIGINAL EMAIL
+            {selected_text}
+
+            EDITED EMAIL
+            {model_response}
+
+            RATING CRITERIA
+            Given the two texts above, rate the edited text for faithfulness based on the criteria below.
+            3 - All parts of the edited text are faithful to the context of the original email. Details align with the content of the original email, and no hallucinations.
+            2 - Some parts of the edited text are faithful to the context of the original email, but there is minimal hallucinations that do not significantly alter the meaning of the original email.
+            1 - Most parts of the edited text are unfaithful to the context of the original email, with significant hallucinations that alter the meaning of the original email.
+        
+            OUTPUT FORMAT
+            Please provide the response in a valid JSON format as shown below. Generate the output in english language only.
+            {{{{
+                "quality" <the_quality_judged_here>,
+                "rating" <your_score_here>,
+                "explanation" <your_explanation_here>
+            }}}}
+
+
+completeness_judge:
+    system:
+            en:
+                You are an expert judge in assessing the completeness of a shortened email. It is your task to determine the quality of the edited text.
+                For a SHORTENING task, completeness means the edited text preserves CRITICAL information only - such as key dates, names, action items, deadlines, and core message purpose.
+                Omitting pleasantries, greetings, redundant context, or minor details is EXPECTED and should NOT lower the score.
+                To make your assessment, the following will be provided
+                - The original email
+                - The edited email
+                - The rating criteria
+
+    user:
+            en:
+                ORIGINAL EMAIL
+                {selected_text}
+
+                EDITED EMAIL
+                {model_response}
+
+                RATING CRITERIA
+                Given the two texts above, rate the shortened text for completeness based on the criteria below.
+                3 - All critical information (dates, names, action items, deadlines, core purpose) is preserved. Minor details may be omitted.
+                2 - Most critical information is preserved, but one important element is missing or unclear.
+                1 - Multiple critical pieces of information are missing, making the email incomplete or confusing.
+
+                OUTPUT FORMAT
+                Please provide the response in a valid JSON format as shown below. Generate the output in english language only.
+                {{{{
+                    "quality" "<the_quality_judged_here>",
+                    "rating" <your_score_here>,
+                    "explanation" "<your_explanation_here>"
+                }}}}
+
+
+relevance_judge:
+    system:
+            en:
+                You are an expert judge in assessing the relevance of an edited text. It is your task to determine the quality of the edited text.
+                Relevance means that the edited text stays focused on the main topic or purpose of the original text, avoiding any unnecessary or off-topic information.
+                To make your assessment, the following will be provided
+                - The original email
+                - The edited email
+                - The rating criteria
+
+    user:
+            en:
+                ORIGINAL EMAIL
+                {selected_text}
+
+                EDITED EMAIL
+                {model_response}
+
+                RATING CRITERIA
+                Given the two texts above, rate the edited text for relevance based on the criteria below.
+                3 - The edited text remains highly relevant to the main topic of the original email, with no off-topic information.
+                2 - The edited text is mostly relevant to the main topic of the original email, but includes some minor off-topic information that does not significantly detract from the overall message.
+                1 - The edited text contains significant off-topic information that detracts from the main message of the original email.
+
+                OUTPUT FORMAT
+                Please provide the response in a valid JSON format as shown below. Generate the output in english language only.
+                {{{{
+                    "quality" <the_quality_judged_here>,
+                    "rating" <your_score_here>,
+                    "explanation" "<your_explanation_here>"
+                }}}}
