@@ -1,9 +1,12 @@
 import streamlit as st
 from generators.generate_response import GenerateEmail
 from utils.selected_option import option_to_action
+from results_analysis.analysis import get_recommendation
+from config.config import load_primary_model
 
 # --- CONFIG ---
-email_generator = GenerateEmail("gpt-4o-mini")
+model = load_primary_model()
+email_generator = GenerateEmail(model)
 
 # --- UI HEADER ---
 st.title("📧 AI Email Editing Tool")
