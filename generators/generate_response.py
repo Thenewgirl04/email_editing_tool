@@ -30,10 +30,6 @@ class GenerateEmail():
         prompts_to_use = self.prompts if self.prompts is not None else globals().get('prompts')
         template = prompts_to_use[prompt_name][prompt_type]
 
-        print(f"Template for {prompt_name}: {prompt_type}:")
-        print(repr(template))
-        print("---")
-
         if isinstance(template,dict):
             template = template['en']
 

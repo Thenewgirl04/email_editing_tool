@@ -1,52 +1,76 @@
-##Load the emails in the data set
-##Generate the response from both models for each three tasks
-##Load the evaluation prompts and use 4.1 as the model to evaluate 4o mini and 4.1
-
-# For each dataset:
-#     Load .jsonl file
-#     For each email:
-#         Call Model A with task-specific prompt
-#         Call Model B with task-specific prompt
-#         Call Judge on both outputs
-#         Store results
-#     Save results to CSV
-
-import json
 import csv
+from pathlib import Path
+
+from config.config import TASKS, results_dir
 from utils.evaluator import evaluate
+from utils.jsonl_loader import load_jsonl
+
+RESULT_FIELDS = [
+    "email_id",
+    "data_type",
+    "task",
+    "input",
+    "model_output",
+    "model",
+    "faithfulness_rating",
+    "faithfulness_explanation",
+    "completeness_rating",
+    "completeness_explanation",
+    "relevance_rating",
+    "relevance_explanation",
+]
+
 
 class EvaluationPipeline:
-    def __init__(self, tasks, datasets):
-        self.tasks =  tasks
-        self.datasets = datasets
+    def __init__(self, tasks=None, dataset_paths=None):
+        self.tasks = tasks or TASKS
+        self.dataset_paths = dataset_paths
 
-    def pipeline(self):
-        for task, dataset_path in zip(self.tasks, self.datasets):
+    def pipeline(
+        self,
+        include_edge_cases: bool = False,
+        tone_style: str = "professional",
+        progress_callback=None,
+    ) -> dict[str, Path]:
+        output_root = results_dir(include_edge_cases)
+        output_root.mkdir(parents=True, exist_ok=True)
+        saved_paths = {}
+
+        dataset_paths = self.dataset_paths
+        if dataset_paths is None:
+            from config.config import dataset_paths as default_dataset_paths
+
+            dataset_paths = default_dataset_paths(include_edge_cases)
+
+        task_emails = {}
+        for task, dataset_path in zip(self.tasks, dataset_paths):
+            task_emails[task] = load_jsonl(dataset_path)
+
+        total_steps = sum(len(emails) for emails in task_emails.values())
+        completed = 0
+
+        for task, dataset_path in zip(self.tasks, dataset_paths):
             all_results = []
+            emails = task_emails[task]
 
-            with open(dataset_path, 'r') as f:
-                for line in f:
-                    email = json.loads(line)
-                    results = evaluate(email, task)
-                    all_results.extend(results)
+            for email in emails:
+                results = evaluate(
+                    email,
+                    task,
+                    tone_style=tone_style,
+                    include_edge_cases=include_edge_cases,
+                )
+                all_results.extend(results)
+                completed += 1
+                if progress_callback:
+                    progress_callback(completed, total_steps, task, email.get("id"))
 
-
-            csv_path = f'results/{task}_results.csv'
-            with open(csv_path, 'w', newline='') as csvfile:
-                fieldnames = ['email_id', 'input', 'model_output', 'model',
-                              'faithfulness_rating', 'faithfulness_explanation',
-                              'completeness_rating', 'completeness_explanation',
-                              'relevance_rating', 'relevance_explanation']
-
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
+            csv_path = output_root / f"{task}_results.csv"
+            with open(csv_path, "w", newline="", encoding="utf-8") as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=RESULT_FIELDS)
                 writer.writeheader()
                 writer.writerows(all_results)
 
-        print(f"Saved {len(all_results)} rows to {csv_path}")
+            saved_paths[task] = csv_path
 
-
-
-
-
-
+        return saved_paths

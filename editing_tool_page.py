@@ -1,7 +1,6 @@
 import streamlit as st
 from generators.generate_response import GenerateEmail
 from utils.selected_option import option_to_action
-from results_analysis.analysis import get_recommendation
 from config.config import load_primary_model
 
 # --- CONFIG ---
@@ -38,6 +37,5 @@ email_text = st.text_area(
 
 
 if st.button("Generate"):
-    print(option)
     st.write(email_generator.generate(action=selected_option, selected_text=email_text))
 
